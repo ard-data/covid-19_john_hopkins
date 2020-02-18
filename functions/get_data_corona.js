@@ -46,7 +46,7 @@ const getData = async (china) => {
 
     const output = stringify(filtered, {header: true})
 
-    console.log(output);
+    return output;
 }
 
 exports.handler = async (event) => {
