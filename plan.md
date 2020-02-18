@@ -10,3 +10,12 @@ Datawrapper
 - make chart
 - update chart regularily
 - provide embed url for wdr
+
+> Get China and Others and without china and other
+[].contains('')
+
+China:
+https://covid-19-data.netlify.com/.netlify/functions/get_data_corona?china=true
+
+without china:
+https://covid-19-data.netlify.com/.netlify/functions/get_data_corona?china=false
