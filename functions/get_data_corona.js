@@ -41,8 +41,8 @@ const getData = async (china) => {
         country: key,
         ...value
     }) );
-    exludedCountries = ['Mainland China', 'Others'];
-    const filtered = lines.filter(line => line.exludedCountries.contains(country) == china);
+    excludedCountries = ['Mainland China', 'Others'];
+    const filtered = lines.filter(line => excludedCountries.contains(line.country) == china);
 
     const output = stringify(filtered, {header: true})
 
