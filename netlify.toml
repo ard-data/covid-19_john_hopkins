@@ -1,3 +1,4 @@
 [build]
 
 functions = "functions"
+command = "exit 0"
