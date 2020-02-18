@@ -1,4 +1,4 @@
 [build]
 
-functions = "functions"
-command = "exit 0"
+functions = "lambda"
+command = "netlify-lambda build functions"
