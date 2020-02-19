@@ -7,8 +7,10 @@ const url = `https://api.github.com/repos/CSSEGISandData/COVID-19/contents/csse_
 const getData = async (china) => {
     const resp = await fetch(url);
     if (!resp.ok) {
+        console.log('Cannot fetch repo files:', resp.status, await resp.text());
         return
     }
+
     const data = await resp.json();
     const files = data.filter( file => file.name.endsWith('.csv'));
     files.sort((a,b) => {
@@ -44,8 +46,7 @@ const getData = async (china) => {
     excludedCountries = ['Mainland China', 'Others'];
     const filtered = lines.filter(line => excludedCountries.includes(line.country) == china);
 
-    const output = stringify(filtered, {header: true})
-
+    const output = stringify(filtered, {header: true});
     return output;
 }
 
@@ -56,7 +57,6 @@ exports.handler = async (event) => {
         statusCode: 200,
         body: csv
     };
-
 }
 
 
