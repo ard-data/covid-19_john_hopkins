@@ -64,4 +64,11 @@ exports.handler = async (event) => {
     };
 }
 
+// Look at the data
+async function run() {
+    const checkData = await getData(false);
+    console.log(checkData);
+  }
+
+run();
 
