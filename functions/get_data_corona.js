@@ -4,7 +4,7 @@ const stringify = require('csv-stringify/lib/sync');
 
 const url = `https://api.github.com/repos/CSSEGISandData/COVID-19/contents/csse_covid_19_data/csse_covid_19_daily_reports`
 
-const getData = async (china) => {
+const getData = async (total) => {
     const resp = await fetch(url);
     if (!resp.ok) {
         console.log('Cannot fetch repo files:', resp.status, await resp.text());
@@ -48,16 +48,23 @@ const getData = async (china) => {
         country: key,
         ...value
     }) );
-    excludedCountries = ['Mainland China', 'Others'];
-    const filtered = lines.filter(line => excludedCountries.includes(line.country) == china);
+
+    lines.push({ country: 'Total', confirmed: 0, deaths: 0, recovered: 0 });
+
+    lines[lines.length -1].confirmed = lines.map(line => line.confirmed).reduce((prev, next) => prev + next);
+    lines[lines.length -1].deaths = lines.map(line => line.deaths).reduce((prev, next) => prev + next);
+    lines[lines.length -1].recovered = lines.map(line => line.recovered).reduce((prev, next) => prev + next);
+
+    excludedCountries = ['Mainland China', 'Total'];
+    const filtered = lines.filter(line => excludedCountries.includes(line.country) == total);
 
     const output = stringify(filtered, {header: true});
     return output;
 }
 
 exports.handler = async (event) => {
-    const china = event.queryStringParameters.china === 'true';
-    const csv = await getData(china);
+    const total = event.queryStringParameters.total === 'true';
+    const csv = await getData(total);
     return {
         statusCode: 200,
         body: csv
@@ -66,7 +73,7 @@ exports.handler = async (event) => {
 
 // Look at the data
 async function run() {
-    const checkData = await getData(false);
+    const checkData = await getData(true);
     console.log(checkData);
   }
 
