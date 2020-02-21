@@ -21,7 +21,12 @@ const getData = async (china) => {
         return aValue - bValue
     })
     const file = files.pop();
+    console.log(file.name);
     const corona = await fetch(file.download_url);
+    if (!corona.ok) {
+        console.log('Cannot download csv:', corona.status, await corona.text());
+        return
+    }
     const records = parse(await corona.text(), {
         columns: true,
         skip_empty_lines: true
