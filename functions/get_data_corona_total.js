@@ -57,12 +57,16 @@ const getData = async (china) => {
 
     console.log(lines[lines.length -1]);
 
-    const output = stringify(lines, {header: true});
+    excludedCountries = ['Mainland China', 'Total'];
+    const filtered = lines.filter(line => excludedCountries.includes(line.country) == china);
+
+    const output = stringify(filtered, {header: true});
     return output;
 }
 
 exports.handler = async (event) => {
-    const csv = await getData();
+    const china = event.queryStringParameters.china === 'true';
+    const csv = await getData(china);
     return {
         statusCode: 200,
         body: csv
@@ -71,7 +75,7 @@ exports.handler = async (event) => {
 
 // Look at the data
 async function run() {
-    const checkData = await getData();
+    const checkData = await getData(true);
     console.log(checkData);
   }
 
