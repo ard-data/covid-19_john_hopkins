@@ -2,6 +2,7 @@ const fetch = require('node-fetch');
 const parse = require('csv-parse/lib/sync');
 const stringify = require('csv-stringify/lib/sync');
 
+
 const url = `https://api.github.com/repos/CSSEGISandData/COVID-19/contents/csse_covid_19_data/csse_covid_19_daily_reports`
 
 const getData = async (total) => {
@@ -12,8 +13,8 @@ const getData = async (total) => {
     }
 
     const data = await resp.json();
-    const files = data.filter( file => file.name.endsWith('.csv'));
-    files.sort((a,b) => {
+    const files = data.filter(file => file.name.endsWith('.csv'));
+    files.sort((a, b) => {
         const ap = a.name.replace('.csv', '').split('-');
         const aValue = parseInt(`${ap[2]}${ap[0]}${ap[1]}`)
         const bp = b.name.replace('.csv', '').split('-');
@@ -30,7 +31,7 @@ const getData = async (total) => {
     const records = parse(await corona.text(), {
         columns: true,
         skip_empty_lines: true
-      })
+    })
     const groupedByCountry = {};
     for (let rec of records) {
         const country = rec['Country/Region'];
@@ -44,21 +45,28 @@ const getData = async (total) => {
         agg.recovered += parseInt(rec.Recovered);
         groupedByCountry[country] = agg;
     }
-    const lines = Object.entries(groupedByCountry).map( ([key, value]) => ({
+    const lines = Object.entries(groupedByCountry).map(([key, value]) => ({
         country: key,
         ...value
-    }) );
+    }));
 
-    lines.push({ country: 'Total', confirmed: 0, deaths: 0, recovered: 0 });
+    lines.push({
+        country: 'Total',
+        confirmed: 0,
+        deaths: 0,
+        recovered: 0
+    });
 
-    lines[lines.length -1].confirmed = lines.map(line => line.confirmed).reduce((prev, next) => prev + next);
-    lines[lines.length -1].deaths = lines.map(line => line.deaths).reduce((prev, next) => prev + next);
-    lines[lines.length -1].recovered = lines.map(line => line.recovered).reduce((prev, next) => prev + next);
+    lines[lines.length - 1].confirmed = lines.map(line => line.confirmed).reduce((prev, next) => prev + next);
+    lines[lines.length - 1].deaths = lines.map(line => line.deaths).reduce((prev, next) => prev + next);
+    lines[lines.length - 1].recovered = lines.map(line => line.recovered).reduce((prev, next) => prev + next);
 
     excludedCountries = ['Mainland China', 'Total'];
     const filtered = lines.filter(line => excludedCountries.includes(line.country) == total);
 
-    const output = stringify(filtered, {header: true});
+    const output = stringify(filtered, {
+        header: true
+    });
     return output;
 }
 
@@ -75,6 +83,6 @@ exports.handler = async (event) => {
 async function run() {
     const checkData = await getData(true);
     console.log(checkData);
-  }
+}
 
 run();
