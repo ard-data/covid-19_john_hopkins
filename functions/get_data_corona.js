@@ -61,7 +61,7 @@ const getData = async (total) => {
     lines[lines.length - 1].deaths = lines.map(line => line.deaths).reduce((prev, next) => prev + next);
     lines[lines.length - 1].recovered = lines.map(line => line.recovered).reduce((prev, next) => prev + next);
 
-    excludedCountries = ['Mainland China', 'Total'];
+    excludedCountries = ['Total', 'Mainland China', 'Germany'];
     const filtered = lines.filter(line => excludedCountries.includes(line.country) == total);
 
     const output = stringify(filtered, {
