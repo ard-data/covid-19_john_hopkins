@@ -77,7 +77,6 @@ const getData = async (total) => {
         });
         return output;
     }
-
 }
 
 exports.handler = async (event) => {
