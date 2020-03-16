@@ -5,8 +5,10 @@
   "license": "MIT",
   "dependencies": {
     "csv": "^5.3.1",
+    "jsdom": "^16.2.0",
     "netlify-lambda": "^1.6.3",
     "node-fetch": "^2.6.0",
+    "table-scraper": "^0.1.0",
     "webpack-node-externals": "^1.7.2"
   }
 }
